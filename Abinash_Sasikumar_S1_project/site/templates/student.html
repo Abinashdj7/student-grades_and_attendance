@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <b id="b"></b>
+    <table id="data-table" border="1px" style="border-color:blue ;">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Course</th>
+                <th>Grade</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    <script>
+        function getUrlParameter(name) {
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(window.location.href);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        document.addEventListener("DOMContentLoaded", async function () {
+            const tableBody = document.querySelector('#data-table tbody');
+            const heading = document.querySelector('#b')
+            const email = getUrlParameter('email');
+            const response = await fetch("/student?email=" + email);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+
+            function nameReturn(name) {
+                let first_name = [];
+                let last_name = [];
+                let switchFlag = 0;
+
+                for (let i = 0; i < name.length; i++) {
+                    if (switchFlag === 0) {
+                        if (i < name.indexOf(".")) {
+                            first_name.push(name[i]);
+                        } else {
+                            switchFlag = 1;
+                        }
+                    } else if (switchFlag === 1) {
+                        if (name[i] === "@") {
+                            break;
+                        }
+                        last_name.push(name[i]);
+                    }
+                }
+
+                return [first_name.join(""), last_name.join("")];
+            }
+
+            data.forEach(item => {
+                const nameReturned = nameReturn(item[0]);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item[0]}</td>
+                    <td>${nameReturned[0]}</td>
+                    <td>${nameReturned[1]}</td>
+                    <td>${item[1]}</td>
+                    <td>${item[2]}/20</td>
+                `;
+                tableBody.appendChild(row);
+            });
+            const headingReturned = nameReturn(data[0][0])
+            heading.innerHTML = `<br><br><br>${headingReturned[0]} ${headingReturned[1]}<br><br><br>`
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+First up is the Server.py:
+
+I used Flask framework . This file has a connection variable 'db' which is used to connect to 'mysql'. 
+There are routes created along with the controller function. There are two types of routes: routes that return
+a template(html page) and routes that return data. More will be explained along
+
+Second up is the index.html:
+
+I have used two routes in this page.The first is the route "/" with the index() controller that return a html page along with some data.The second is the route "/attendance" with pie_chart_data() controller that returns data that we can get with fetch request function. This is so that I can pass this data to pass into the charts generating function.
+
+When we click the each attributes in the active population section of each year. It will go to its respective 
+population_(year)_(program).html.
+
+Note:
+The population_(year)_(program).html are not dynamic as I didn't learn how to create pages dynamically at the time.
+
+Third up is the population_(year)_(program).html:
+
+The html page is rendered using the route "/population_(year)_(program).html"
+
+Here I have generated the table of students with their first name,last name and courses passed.The data is fetched using the route "/population/(year)/(program)" with the population_(year)_(program)_fetch() controller.
+ 
+I have generated the table of courses along with their duration for the respective program using "/course/()".
+
+When one clicks any student data , it will redirect of the grades of the respective student using the route "/student.html?email=".This is so that we can render data dynamically.
+
+Finally, it is student.html:
+
+The route "/student" will return grade by taking the 'email' attribute from the template url.
+
+
+
+
+

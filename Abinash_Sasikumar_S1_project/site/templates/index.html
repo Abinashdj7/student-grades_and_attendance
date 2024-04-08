@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+<body>
+    <br>
+    Welcome, <b>Stephanie</b>
+    <br>
+    <br>
+    <br>
+    <div style="display:flex;align-items: center;">
+        <div style="margin-right: 100px;">
+            <b> Active populations(2020)</b><br>
+            <div onclick="ismPopulation2020()" class="btn btn-primary">Msc - Computer Science - ISM ({{todos[0][0]}})
+            </div>
+            <div onclick="dsaPopulation2020()" class="btn btn-primary">Msc - Computer Science - DSA ({{todos[0][1]}})
+            </div>
+            <div onclick="csPopulation2020()" class="btn btn-primary">Msc - Computer Science - CS ({{todos[0][2]}})
+            </div>
+            <div onclick="sePopulation2020()" class="btn btn-primary">Msc - Computer Science - SE ({{todos[0][3]}})
+            </div>
+            <div onclick="aisPopulation2020()" class="btn btn-primary">Msc - Computer Science - AIs ({{todos[0][4]}})
+            </div>
+        </div>
+        <div style="margin-left: 100px;">
+            <b> Active populations(2021)</b><br>
+            <div onclick="ismPopulation2021()" class="btn btn-primary">Msc - Computer Science - ISM ({{todos[1][0]}})
+            </div>
+            <div onclick="dsaPopulation2021()" class="btn btn-primary">Msc - Computer Science - DSA ({{todos[1][1]}})
+            </div>
+            <div onclick="csPopulation2021()" class="btn btn-primary">Msc - Computer Science - CS ({{todos[1][2]}})
+            </div>
+            <div onclick="sePopulation2021()" class="btn btn-primary">Msc - Computer Science - SE ({{todos[1][3]}})
+            </div>
+            <div onclick="aisPopulation2021()" class="btn btn-primary">Msc - Computer Science - AIs ({{todos[1][4]}})
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div style="display: flex;align-items: center;">
+        <div style="margin-right: 50px;">
+            <b>Overall populations(2020)</b><br>
+            Msc - Computer Science - ISM ({{attendance[0][0]}}%)<br>
+            Msc - Computer Science - DSA ({{attendance[0][1]}}%)<br>
+            Msc - Computer Science - CS ({{attendance[0][2]}}%)<br>
+            Msc - Computer Science - SE ({{attendance[0][3]}}%)<br>
+            Msc - Computer Science - AIs ({{attendance[0][4]}}%)<br>
+        </div>
+        <div style="margin-left: 10px;">
+            <b>Overall populations(2021)</b><br>
+            Msc - Computer Science - ISM ({{attendance[1][0]}}%)<br>
+            Msc - Computer Science - DSA ({{attendance[1][1]}}%)<br>
+            Msc - Computer Science - CS ({{attendance[1][2]}}%)<br>
+            Msc - Computer Science - SE ({{attendance[1][3]}}%)<br>
+            Msc - Computer Science - AIs ({{attendance[1][4]}}%)<br>
+        </div>
+    </div>
+    <br><br><br>
+    <b>2020</b>
+    <div style="display: flex;">
+        <div style="margin-right: 100px;">
+            <canvas id="myPieChart1" width="300" height="300"></canvas>
+        </div>
+        <div style="margin-right: 100px;">
+            <canvas id="myBarGraph1" width="300" height="300"></canvas>
+        </div>
+    </div>
+    <br><br><br>
+    <b>2021</b>
+    <div style="display: flex;">
+        <div style="margin-right: 100px;">
+            <canvas id="myPieChart2" width="300" height="300"></canvas>
+        </div>
+        <div style="margin-right: 100px;">
+            <canvas id="myBarGraph2" width="300" height="300"></canvas>
+        </div>
+    </div>
+    <script>
+        //get data from "/"
+        const attend = fetch('/attendance').then(async (res) => res.json()).then((payload) => {
+            var data1 = {
+                labels: ['ISM', 'DSA', 'CS', 'SE', 'AIs'],
+                datasets: [{
+                    data: payload[0], // Example data
+                    backgroundColor: [
+                        'red',
+                        'blue',
+                        'yellow',
+                        'green',
+                        'purple'
+                    ]
+                }]
+            };
+
+            var data2 = {
+                labels: ['ISM', 'DSA', 'CS', 'SE', 'AIs'],
+                datasets: [{
+                    data: payload[1], // Example data
+                    backgroundColor: [
+                        'red',
+                        'blue',
+                        'yellow',
+                        'green',
+                        'purple'
+                    ]
+                }]
+            };
+
+            // Options for the pie chart
+            var options = {
+                responsive: true
+            };
+
+            var canvasPie1 = document.getElementById('myPieChart1');
+            // Get the canvas element
+            if (canvasPie1) {
+                var ctxPie1 = canvasPie1.getContext('2d');
+
+                // Create the pie chart
+
+                var myPieChart1 = new Chart(ctxPie1, {
+                    type: 'pie',
+                    data: data1,
+                    options: options
+                });
+            } else {
+                console.error('Canvas element with ID "myPieChart" not found.');
+            }
+
+            var canvasBar1 = document.getElementById('myBarGraph1');
+            if (canvasBar1) {
+                var ctxBar1 = canvasBar1.getContext('2d');
+
+                // Create the bar chart
+                const myBarGraph1 = new Chart(ctxBar1, {
+                    type: 'bar',
+                    data: data1,
+                    options: options
+                });
+            } else {
+                console.error('Canvas element with ID "myBarGraph" not found.');
+            }
+
+            var canvasPie2 = document.getElementById('myPieChart2');
+            // Get the canvas element
+            if (canvasPie2) {
+                var ctxPie2 = canvasPie2.getContext('2d');
+
+                // Create the pie chart
+                var myPieChart2 = new Chart(ctxPie2, {
+                    type: 'pie',
+                    data: data2,
+                    options: options
+                });
+            } else {
+                console.error('Canvas element with ID "myPieChart" not found.');
+            }
+
+            var canvasBar2 = document.getElementById('myBarGraph2');
+            if (canvasBar2) {
+                var ctxBar2 = canvasBar2.getContext('2d');
+
+                // Create the bar chart
+                const myBarGraph2 = new Chart(ctxBar2, {
+                    type: 'bar',
+                    data: data2,
+                    options: options
+                });
+            } else {
+                console.error('Canvas element with ID "myBarGraph" not found.');
+            }
+        })
+        const ismPopulation2020 = () => {
+            window.location.href = "/population_2020_ISM.html"
+        }
+        const dsaPopulation2020 = () => {
+            window.location.href = "/population_2020_DSA.html"
+        }
+        const csPopulation2020 = () => {
+            window.location.href = "/population_2020_CS.html"
+        }
+        const sePopulation2020 = () => {
+            window.location.href = "/population_2020_SE.html"
+        }
+        const aisPopulation2020 = () => {
+            window.location.href = "/population_2020_AIs.html"
+        }
+        const ismPopulation2021 = () => {
+            window.location.href = "/population_2021_ISM.html"
+        }
+        const dsaPopulation2021 = () => {
+            window.location.href = "/population_2021_DSA.html"
+        }
+        const csPopulation2021 = () => {
+            window.location.href = "/population_2021_CS.html"
+        }
+        const sePopulation2021 = () => {
+            window.location.href = "/population_2021_SE.html"
+        }
+        const aisPopulation2021 = () => {
+            window.location.href = "/population_2021_AIs.html"
+        }
+
+    </script>
+</body>
+
+</html>
